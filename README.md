@@ -1,2 +1,29 @@
 # liblhdc-collections
 Collected lhdc libs from any platform.
+
+## Savitech LHDC Codec for AOSP
+LHDC（包含LHDCV5）是[Savitech LHDC](https://lhdc.co/cn)发行的编解码技术，其最新开源内容可访问[
+Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是用于最高质量无线音频的下一代技术。 LHDC 能大幅降低无线与有线音频设备之间的音频质量差异，提供最逼真的超高音质，让用户能尽情享受蓝牙无线音频带来的便利性和高质量。适用于视频、音乐和游戏等所有应用。以漫步者花再 Halo Space 体验为例，最新的LHDCV5(192kHz & 24bit)在实际体验上已经优于LDAC(96kHz & 32bit)。
+
+比较有意思的是，包括已知的LDAC、AAC、OPUS、LC3、aptX[L/HD]在内，大多数优于SBC的A2DP codec算法都已开源，唯独LHDC还未实现彻底开源；要实现LHDC编解码，需要使用独立于项目的第三方库；大多数耳机用的是Savitech LHDC的".a"格式的静态库，而Android用的是Savitech LHDC的".so"格式的动态库；“.a”静态库通常伴随着BES等项目的SDK提供，“.so”动态库在支持LHDC的手机中可轻易找到。
+
+## 本仓库目录介绍
+
+
+## LHDCV5移植
+我对BES的项目不是很了解，因为这方面资料不完整；而AOSP方面资料倒是挺多的。
+
+早段时间我从AOSP移植了LHDCV5到ESP-IDF，因为不知道LHDCV5解码算法，所以只是用正弦波替换了解码函数，ESP32作为A2DP Sink连接手机且使用LHDCV5协商后，手机播放音乐时Sink端听到的是固定的标准音，证明移植成功了。ESP-IDF默认用的是SBC，其实它还额外支持AAC（M12、M24），忘了是5.1.6还是哪个版本的ESP-IDF，其已经内置了A2DP拓展逻辑，能加入其它codecs，不过一直没人做这方面的具体拓展。我注意到cfint对ESP-IDF 5.1.4写了一套较为成熟的A2DP拓展逻辑（5.1.4本身不具备拓展能力），能依据CIE结构体在协商时动态选择所有ESP32支持的解码器，所以我就顺着他的路走下去了。大致就是1）改CIE结构体、2）在拓展的A2DP函数中增加LHDCV5函数，这方面依葫芦画瓢模仿LDAC可实现。麻烦的是3）LHDCV5第三方库的移植与实现。
+
+1）CIE结构体：ESP-IDF的bluedroid-stack有一个存储codec能力的CIE结构体（位于esp_a2dp_api.h），这里可加入LHDCV5的CIE_LEN，可与其他设备进行A2DP协商；因为大部分CIE_LEN = CODEC_LEN - 2，而LHDCV5的CODEC_LEN查询a2dp_vendor_lhdc_constants.h可知是13，所以LHDCV5的CIE_LEN其长度是11，这已经验证过了是对的；
+
+2）ESP-IDF的LHDCV5函数文件移植：为ESP-IDF添加LHDCV5的decoder函数，这方面参考AOSP，移植内容包括4个头文件（a2dp_vendor_lhdc_constants.h、a2dp_vendor_lhdcv5_constants.h、a2dp_vendor_lhdcv5_decoder.h、a2dp_vendor_lhdcv5.h）和个源文件（a2dp_vendor_lhdcv5_decoder.c、a2dp_vendor_lhdcv5.c），移植的内容无非是更改日志打印、内存函数、变量定义，其它大体上差不多不用动；
+
+函数依赖方面是这样：a2d_sbc.c(修改版) --调用--> a2d_sbc_decoder.c --调用--> a2dp_vendor.c --调用--> a2dp_vendor_lhdcv5.c --调用--> a2dp_vendor_lhdcv5_decoder.c --调用--> lhdcv5BT_dec.c(外部) --调用--> lhdcv5_util_dec.c(外部)。
+
+3）LHDCV5外部库：让我头疼的就是LHDCV5的外部库，即使是高度开源的AOSP，也只得到了lhdcv5BT_dec.c/.h + lhdcv5_util_dec.h这3个文件，缺乏包含LHDCV5解码算法的lhdcv5_util_dec.c；可以依据lhdcv5_util_dec.h声明函数的参数逆推出lhdcv5_util_dec.c，但是如前面所说，因为不知道LHDCV5解码算法，所以我只是用正弦波替换了解码函数，当然连接后听到的也只是正弦波生成的标准音。真心希望有大佬能在这方面指点指点QWQ...总之我知道的人里面有大佬用（IDA Pro）逆向Android LHDCV5动态库（liblhdcv5.so）的方法，成功写出了LHDCV5的解码算法（我不知道，我不会，我很懵）
+
+## LHDCV5解码算法
+LHDCV5的解码算法位于lhdcv5_util_dec.c，这个文件目前已知的还没人开源真正的解码算法。之前e-mail联系过Savitech LHDC要库，属于是石沉大海了QWQ...
+
+我这里开源那个正弦波代替解码的lhdcv5_util_dec.c（归类在ESP-IDF里），仅供参考，可用来验证你的LHDCV5移植是否成功。当然如果你搞出LHDCV5算法了，欢迎联系我，teach me! 😍😍😍我已经迫不及待想在ESP32或者SF32等设备上听到LHDCV5传输的音乐了~😍😍😍
