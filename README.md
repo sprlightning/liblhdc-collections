@@ -10,18 +10,36 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 ## 本仓库目录介绍
 - 目录**BES-IHC**，适用于BES的LHDC[V5]库，包含.a静态库和头文件，完整SDK详见[audio_prj_collections](https://github.com/sprlightning/audio_prj_collections):
 	```c
-	BES-IHC
 	├─a2dp_decoder
+	│      a2dp_decoder_lhdc.cpp
+	│      a2dp_decoder_lhdcv5.cpp
+	│
 	├─audio_codec
 	│  ├─liblhdc-dec
+	│  │      BEST2500P_libLHDC_V2_V3_V4_4_0_13_SAVI_KEYPRO_UUID.a
+	│  │
 	│  └─liblhdcv5-dec
+	│          BEST2500P_libLHDC_V5_5_2_0_SAVI_KEYPRO_UUID.a
+	│
 	└─audio_codec_lib
 		├─liblhdc-dec
+		│  │  Makefile
+		│  │
 		│  └─inc
+		│          lhdcUtil.h
+		│
 		├─liblhdc-enc
+		│  │  Makefile
+		│  │
 		│  └─inc
+		│          lhdc_cfg.h
+		│          lhdc_enc_api.h
+		│
 		└─liblhdcv5-dec
+			│  Makefile
+			│
 			└─inc
+					lhdcv5_util_dec.h
 	```
 
 - 目录**AOSP**,适用于AOSP的的LHDC[V5]库，就decoder而言，除了无解码算法源文件（lhdcv5_util_dec.c），其余源文件及头文件是完整的；
