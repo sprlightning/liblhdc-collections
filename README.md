@@ -42,7 +42,7 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 					lhdcv5_util_dec.h
 	```
 
-- 目录**AOSP**,适用于AOSP的的LHDC[V5]库，就decoder而言，除了无解码算法源文件（lhdcv5_util_dec.c），其余源文件及头文件是完整的；
+- 目录**AOSP**,适用于AOSP的的LHDC[V5]库，就decoder而言，除了无解码算法源文件（lhdcv5_util_dec.c），其余源文件及头文件是完整的；此外也包含提取自XIAOMI HyperOS 2.0.211.0的".so"动态库：
 	```c
 	├─liblhdc
 	│  │  Android.bp
