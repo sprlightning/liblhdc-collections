@@ -112,9 +112,41 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 	```
 
 - 目录**ESP-IDF**，包含适用于ESP-IDF的移植版liblhdcv5于lhdcv5 decoder，均具备完整的源文件和头文件，均移植于AOSP，使用LHDCV5协商后，可听到正弦波生成的标准音；其中lhdcv5_util_dec.c仅具备模拟解码的能力，仅供参考，用真正的LHDCV5解码算法替换其中的正弦波（模拟解码）部分可实现完整的LHDCV5音频Sink。下面是目录结构：
-```c
-
-```
+	```c
+	└─bluedroid
+		├─api
+		│  └─include
+		│          esp_a2dp_api.h
+		│
+		├─external
+		│  └─liblhdcv5dec
+		│      │  CMakeLists.txt
+		│      │  release_note
+		│      │
+		│      ├─inc
+		│      │      lhdcv5BT_dec.h
+		│      │
+		│      ├─include
+		│      │      lhdcv5_util_dec.h
+		│      │
+		│      └─src
+		│              lhdcv5BT_dec.c
+		│              lhdcv5_util_dec.c
+		│
+		└─stack
+			├─a2dp
+			│      a2dp_vendor.c
+			│      a2dp_vendor_lhdcv5.c
+			│      a2dp_vendor_lhdcv5_decoder.c
+			│
+			└─include
+				└─stack
+						a2dp_vendor.h
+						a2dp_vendor_lhdcv5.h
+						a2dp_vendor_lhdcv5_constants.h
+						a2dp_vendor_lhdcv5_decoder.h
+						a2dp_vendor_lhdc_constants.h
+	```
 
 ## LHDCV5移植
 我对BES的项目不是很了解，因为这方面资料不完整；而AOSP方面资料倒是挺多的。
