@@ -43,6 +43,73 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 	```
 
 - 目录**AOSP**,适用于AOSP的的LHDC[V5]库，就decoder而言，除了无解码算法源文件（lhdcv5_util_dec.c），其余源文件及头文件是完整的；
+	```c
+	├─liblhdc
+	│  │  Android.bp
+	│  │  release_note
+	│  │
+	│  ├─inc
+	│  │      lhdcBT.h
+	│  │
+	│  ├─include
+	│  │      cirbuf.h
+	│  │      lhdcv2_process.h
+	│  │      lhdcv3_process.h
+	│  │      lhdc_api.h
+	│  │      lhdc_cfg.h
+	│  │      lhdc_enc_config.h
+	│  │      lhdc_process.h
+	│  │      llac_enc_api.h
+	│  │
+	│  └─src
+	│          lhdcBT_enc.c
+	│
+	├─liblhdc-hyperos2_0_211_0
+	│  └─system
+	│      └─lib64
+	│              liblhdc.so
+	│              liblhdcv5.so
+	│
+	├─liblhdcdec
+	│  │  Android.bp
+	│  │  release_note
+	│  │
+	│  ├─inc
+	│  │      lhdcBT_dec.h
+	│  │
+	│  ├─include
+	│  │      lhdcUtil.h
+	│  │
+	│  └─src
+	│          lhdcBT_dec.c
+	│
+	├─liblhdcv5
+	│  │  Android.bp
+	│  │  release_note
+	│  │
+	│  ├─inc
+	│  │      lhdcv5BT.h
+	│  │
+	│  ├─include
+	│  │      lhdcv5BT_ext_func.h
+	│  │      lhdcv5_api.h
+	│  │
+	│  └─src
+	│          lhdcv5BT_enc.c
+	│
+	└─liblhdcv5dec
+		│  Android.bp
+		│  release_note
+		│
+		├─inc
+		│      lhdcv5BT_dec.h
+		│
+		├─include
+		│      lhdcv5_util_dec.h
+		│
+		└─src
+				lhdcv5BT_dec.c
+	```
 
 ## LHDCV5移植
 我对BES的项目不是很了解，因为这方面资料不完整；而AOSP方面资料倒是挺多的。
