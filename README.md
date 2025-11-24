@@ -8,7 +8,23 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 比较有意思的是，包括已知的LDAC、AAC、OPUS、LC3、aptX[L/HD]在内，大多数优于SBC的A2DP codec算法都已开源，唯独LHDC还未实现彻底开源；要实现LHDC编解码，需要使用独立于项目的第三方库；大多数耳机用的是Savitech LHDC的".a"格式的静态库，而Android用的是Savitech LHDC的".so"格式的动态库；“.a”静态库通常伴随着BES等项目的SDK提供，“.so”动态库在支持LHDC的手机中可轻易找到。
 
 ## 本仓库目录介绍
+- 目录**BES-IHC**，适用于BES的LHDC[V5]库，包含.a静态库和头文件，完整SDK详见[audio_prj_collections](https://github.com/sprlightning/audio_prj_collections):
+	```c
+	BES-IHC
+	├─a2dp_decoder
+	├─audio_codec
+	│  ├─liblhdc-dec
+	│  └─liblhdcv5-dec
+	└─audio_codec_lib
+		├─liblhdc-dec
+		│  └─inc
+		├─liblhdc-enc
+		│  └─inc
+		└─liblhdcv5-dec
+			└─inc
+	```
 
+- 目录**AOSP**,适用于AOSP的的LHDC[V5]库，就decoder而言，除了无解码算法源文件（lhdcv5_util_dec.c），其余源文件及头文件是完整的；
 
 ## LHDCV5移植
 我对BES的项目不是很了解，因为这方面资料不完整；而AOSP方面资料倒是挺多的。
