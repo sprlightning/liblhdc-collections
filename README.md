@@ -111,7 +111,7 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 				lhdcv5BT_dec.c
 	```
 
-- 目录**ESP-IDF**，包含适用于ESP-IDF的移植版liblhdcv5于lhdcv5 decoder，均具备完整的源文件和头文件，均移植于AOSP，使用LHDCV5协商后，可听到正弦波生成的标准音；其中lhdcv5_util_dec.c仅具备模拟解码的能力，仅供参考，用真正的LHDCV5解码算法替换其中的正弦波（模拟解码）部分可实现完整的LHDCV5音频Sink。下面是目录结构：
+- 目录**ESP-IDF**，包含适用于ESP-IDF的移植版[liblhdcv5dec](https://github.com/sprlightning/liblhdcv5dec)和lhdcv5 decoder，均具备完整的源文件和头文件，均移植于AOSP，使用LHDCV5协商后，可听到正弦波生成的标准音；其中lhdcv5_util_dec.c仅具备模拟解码的能力，仅供参考，用真正的LHDCV5解码算法替换其中的正弦波（模拟解码）部分可实现完整的LHDCV5音频Sink。下面是目录结构：
 	```c
 	└─bluedroid
 		├─api
@@ -159,9 +159,9 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 
 函数依赖方面是这样：a2d_sbc.c(修改版) --调用--> a2d_sbc_decoder.c --调用--> a2dp_vendor.c --调用--> a2dp_vendor_lhdcv5.c --调用--> a2dp_vendor_lhdcv5_decoder.c --调用--> lhdcv5BT_dec.c(外部) --调用--> lhdcv5_util_dec.c(外部)。
 
-3）LHDCV5外部库：让我头疼的就是LHDCV5的外部库，即使是高度开源的AOSP，也只得到了lhdcv5BT_dec.c/.h + lhdcv5_util_dec.h这3个文件，缺乏包含LHDCV5解码算法的lhdcv5_util_dec.c；可以依据lhdcv5_util_dec.h声明函数的参数逆推出lhdcv5_util_dec.c，但是如前面所说，因为不知道LHDCV5解码算法，所以我只是用正弦波替换了解码函数，当然连接后听到的也只是正弦波生成的标准音。真心希望有大佬能在这方面指点指点QWQ...总之我知道的人里面有大佬用（IDA Pro）逆向Android LHDCV5动态库（liblhdcv5.so）的方法，成功写出了LHDCV5的解码算法（我不知道，我不会，我很懵）
+3）LHDCV5外部库：让我头疼的就是LHDCV5的外部库，即使是高度开源的AOSP，也只得到了lhdcv5BT_dec.c/.h + lhdcv5_util_dec.h这3个文件，缺乏包含LHDCV5解码算法的lhdcv5_util_dec.c；可以依据lhdcv5_util_dec.h声明函数的参数逆推出lhdcv5_util_dec.c，但是如前面所说，因为不知道LHDCV5解码算法，所以我只是用正弦波替换了解码函数，当然连接后听到的也只是正弦波生成的标准音。了解到的一个思路是用（IDA Pro）逆向Android LHDCV5动态库（liblhdcv5.so）或BES的静态库来推导出LHDCV5的解码算法（我不知道，我不会，我很懵，希望有大佬能在这方面指点指点QWQ...），还有就是等待大佬开源~
 
 ## LHDCV5解码算法
-LHDCV5的解码算法位于lhdcv5_util_dec.c，这个文件目前已知的还没人开源真正的解码算法。之前e-mail联系过Savitech LHDC要库，属于是石沉大海了QWQ...
+LHDCV5的解码算法位于lhdcv5_util_dec.c，其中真正的解码算法似乎还没人开源，这里等待大佬开源~
 
 我这里开源那个正弦波代替解码的lhdcv5_util_dec.c（归类在ESP-IDF里），仅供参考，可用来验证你的LHDCV5移植是否成功。当然如果你搞出LHDCV5算法了，欢迎联系我，teach me! 😍😍😍我已经迫不及待想在ESP32或者SF32等设备上听到LHDCV5传输的音乐了~😍😍😍
