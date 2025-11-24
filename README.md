@@ -151,7 +151,7 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 ## LHDCV5移植
 我对BES的项目不是很了解，因为这方面资料不完整；而AOSP方面资料倒是挺多的。
 
-早段时间我从AOSP移植了LHDCV5到ESP-IDF，因为不知道LHDCV5解码算法，所以只是用正弦波替换了解码函数，ESP32作为A2DP Sink连接手机且使用LHDCV5协商后，手机播放音乐时Sink端听到的是固定的标准音，证明移植成功了。ESP-IDF默认用的是SBC，其实它还额外支持AAC（M12、M24），忘了是5.1.6还是哪个版本的ESP-IDF，其已经内置了A2DP拓展逻辑，能加入其它codecs，不过一直没人做这方面的具体拓展。我注意到cfint对ESP-IDF 5.1.4写了一套较为成熟的A2DP拓展逻辑（5.1.4本身不具备拓展能力），能依据CIE结构体在协商时动态选择所有ESP32支持的解码器，所以我就顺着他的路走下去了。大致就是1）改CIE结构体、2）在拓展的A2DP函数中增加LHDCV5函数，这方面依葫芦画瓢模仿LDAC可实现。麻烦的是3）LHDCV5第三方库的移植与实现。
+早段时间我从AOSP移植了LHDCV5到ESP-IDF，因为不知道LHDCV5解码算法，所以只是用正弦波替换了解码函数，ESP32作为A2DP Sink连接手机且使用LHDCV5协商后，手机播放音乐时Sink端听到的是固定的标准音，证明移植成功了。ESP-IDF默认用的是SBC，其实它还额外支持AAC（M12、M24），忘了是5.1.6还是哪个版本的ESP-IDF，其已经内置了A2DP拓展逻辑，能加入其它codecs，不过一直没人做这方面的具体拓展。我注意到cfint对ESP-IDF 5.1.4写了一套较为成熟的A2DP拓展逻辑（5.1.4本身不具备拓展能力），能依据CIE结构体在协商时动态调用对应的解码器来解码A2DP数据包，所以我就顺着他的路走下去了。大致就是1）改CIE结构体、2）在拓展的A2DP函数中增加LHDCV5函数，这方面依葫芦画瓢模仿LDAC可实现。麻烦的是3）LHDCV5第三方库的移植与实现。
 
 1）CIE结构体：ESP-IDF的bluedroid-stack有一个存储codec能力的CIE结构体（位于esp_a2dp_api.h），这里可加入LHDCV5的CIE_LEN，可与其他设备进行A2DP协商；因为大部分CIE_LEN = CODEC_LEN - 2，而LHDCV5的CODEC_LEN查询a2dp_vendor_lhdc_constants.h可知是13，所以LHDCV5的CIE_LEN其长度是11，这已经验证过了是对的；
 
