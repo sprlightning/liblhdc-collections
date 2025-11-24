@@ -42,7 +42,7 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 					lhdcv5_util_dec.h
 	```
 
-- 目录**AOSP**,适用于AOSP的的LHDC[V5]库，就decoder而言，除了无解码算法源文件（lhdcv5_util_dec.c），其余源文件及头文件是完整的；此外也包含提取自XIAOMI HyperOS 2.0.211.0的".so"动态库：
+- 目录**AOSP**，适用于AOSP的的LHDC[V5]库，就decoder而言，除了无解码算法源文件（lhdcv5_util_dec.c），其余源文件及头文件是完整的；此外也包含提取自XIAOMI HyperOS 2.0.211.0的".so"动态库：
 	```c
 	├─liblhdc
 	│  │  Android.bp
@@ -110,6 +110,11 @@ Savitech LHDC Codec for AOSP](https://gitlab.com/savitech-lhdc)获取。LHDC是�
 		└─src
 				lhdcv5BT_dec.c
 	```
+
+- 目录**ESP-IDF**，包含适用于ESP-IDF的移植版liblhdcv5于lhdcv5 decoder，均具备完整的源文件和头文件，均移植于AOSP，使用LHDCV5协商后，可听到正弦波生成的标准音；其中lhdcv5_util_dec.c仅具备模拟解码的能力，仅供参考，用真正的LHDCV5解码算法替换其中的正弦波（模拟解码）部分可实现完整的LHDCV5音频Sink。下面是目录结构：
+```c
+
+```
 
 ## LHDCV5移植
 我对BES的项目不是很了解，因为这方面资料不完整；而AOSP方面资料倒是挺多的。
